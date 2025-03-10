@@ -3,66 +3,72 @@ import classes
 import config
 import shutil
 import requests
+
+# Web scrapper
 from bs4 import BeautifulSoup
+
+# Decorators
+from typing_extensions import override
 
 
 class item_parser():
-    """ Abstract construct made to get normalized item data from different endpoints """
+    """ Abstract construct made to get normalized item data from different endpoints 
+        Name is just the name of the market vendor"""
 
-    def __init__(self, name):
-        self.name = name
+    def __init__(self, name: str):
+        self.name: str = name
         pass
 
-    def get_item_list(self):
+    def get_item_list(self) -> list[str] | None:
         pass
 
 
 class csfloat_item_parser(item_parser):
 
+    @override
     def get_item_list(self):
-        jsonData = jsonModules.get_json_csfloat()
+        jsonData  = jsonModules.get_json_csfloat()
 
         # Get all item names
-        options = []
-        for i in jsonData['data']:
+        options: list[str] = []
+        for item_struct in jsonData['data']:
 
             # Create new item
             item = classes.Item()
 
-            item.id = i['id']
-            item.name = i['item']['market_hash_name']
-            item.float_val = i['item'].get('float_value')
-            item.paint_seed = i['item'].get('paint_seed')
-            item.price_latest = i['price']/100
+            # Pull all the values
+            item.id = item_struct['id']
+            item.name = item_struct['item']['market_hash_name']
+            item.float_val = item_struct['item'].get('float_value')
+            item.paint_seed = item_struct['item'].get('paint_seed')
+            item.price = item_struct['price']/100
             item.currency = "USD"
-            item.price_sold = None
             item.vendor = "CS Float"
-            item.offer_type = i['type']
+            item.offer_type = item_struct['type']
             item.check_float()
 
             # Stickers
-            if i['item'].get('stickers') is not None:
-                for i in i['item'].get('stickers'):
-                    item.stickers.append(str(i.get('slot'))+i.get('name'))
+            if item_struct['item'].get('stickers') is not None:
+                for item_struct in item_struct['item'].get('stickers'):
+                    item.stickers.append(str(item_struct.get('slot'))+item_struct.get('name'))
 
             # Name
-            item_name = item.name
-            shellwidth = shutil.get_terminal_size().columns - len(item_name) - \
-                len(" Steam ")
-            item_name += " " * shellwidth
+            header: str = str(item.name)
+            shellwidth = shutil.get_terminal_size().columns - len(header) - len(" Steam ")
+            header += " " * shellwidth
 
             # Service
-            item_name += item.vendor + "\n"
+            header += item.vendor + "\n"
 
             # Pricing
-            item_name += str(item.price_latest) + " " + str(item.currency)
+            header += str(item.price) + " " + str(item.currency)
 
             # Offer type
-            item_name += "    " + item.offer_type
+            header += "    " + str(item.offer_type)
 
-            item.header = item_name
+            item.header = header
             config.item_list.append(item)
-            options.append(item_name)
+            options.append(header)
 
         return options
 
@@ -70,8 +76,10 @@ class csfloat_item_parser(item_parser):
 class steam_item_parser(item_parser):
 
     def get_item_list(self):
-        url = f"https://steamcommunity.com/market/search?appid=730&q={
-            config.curr_item}"
+        url = (
+            f"https://steamcommunity.com/market/search?appid=730&q="
+            f"{config.curr_item}"
+        )
         response = requests.get(url)
         soup = BeautifulSoup(response.text, 'html.parser')
 

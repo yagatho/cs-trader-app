@@ -1,18 +1,20 @@
 # File used to store all the helper classes
 
+# Utils
+from __future__ import annotations
 
 class Params:
     """ Class used to store global query params across all the markets """
 
-    def __init__(self, page, limit):
-        self.page = page
-        self.limit = limit
+    def __init__(self, page: int, limit: int):
+        self.page: int = page
+        self.limit: int = limit
 
 
 class State:
     """ State abstract construct for the state machine """
 
-    def run(self):
+    def run(self) -> State | None:
         pass
 
 
@@ -20,7 +22,7 @@ class StateMachine:
     """ State machine main """
 
     def __init__(self, baseState: State):
-        self.state = baseState
+        self.state: State = baseState
 
     def run(self):
         return self.state.run()
@@ -30,24 +32,20 @@ class StateMachine:
 
 
 class Item:
-    def __init__(self, id: str = "", name: str = "", pricelat: float = 0,
-                 pricesold: float = 0, vendor: str = "", offer_type: str = "",
-                 header: str = "", float_val: float = 0, paint_seed: int = 0,
-                 currency: str = ""
-                 ):
+    def __init__(self):
 
-        self.id = id
-        self.name = name
-        self.price_latest = pricelat
-        self.price_sold = pricesold
-        self.vendor = vendor
-        self.offer_type = offer_type
-        self.header = header
-        self.float_val = float_val
-        self.paint_seed = paint_seed
-        self.currency = currency
-        self.wear = "(BS)"
-        self.stickers = []
+        self.id:int | None = None
+        self.name:str | None = None
+        self.price:float | None = None
+        self.vendor:str | None = None
+        self.offer_type:str | None = None
+        self.header:str | None = None
+        self.float_val:float | None = None
+        self.paint_seed:int | None = None
+        self.currency:str | None = None
+        self.wear:str | None = "(BS)"
+        self.stickers:list[str] | None = []
+
 
     def check_float(self):
         if self.float_val is None:

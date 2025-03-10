@@ -1,10 +1,19 @@
 # Main program file
 import config
-import graphics
-import classes
+
+# Util
+from classes import State
+from classes import StateMachine
+
+# Graphics
+from graphics import draw_menu_page
+from graphics import draw_market_page
+from graphics import clear_terminal
+
 import itemParsers
 from rich.console import Console
 from InquirerPy.separator import Separator
+from typing_extensions import override
 
 # Console instance
 console = Console()
@@ -12,9 +21,10 @@ console = Console()
 
 # STATES
 # Main menu state
-class MainMenu(classes.State):
+class MainMenu(State):
+    @override
     def run(self):
-        ans = graphics.draw_menu_page(['Go to market', 'Quit'])
+        ans = draw_menu_page(['Go to market', 'Quit'])
 
         if ans == 0:
             return ShowMarket()
@@ -23,9 +33,10 @@ class MainMenu(classes.State):
 
 
 # Market selection state
-class MarketSelect(classes.State):
+class MarketSelect(State):
+    @override
     def run(self):
-        config.curr_market = graphics.draw_menu_page(
+        config.curr_market = draw_menu_page(
             ['Cs Float', 'Steam', Separator(" "), "Back"],
             "What market you want to search?"
         )
@@ -34,17 +45,19 @@ class MarketSelect(classes.State):
 
 
 # Market offers state
-class ShowMarket(classes.State):
+class ShowMarket(State):
+    @override
     def run(self):
-        options = []
-        for itemP in itemParsers.parsers:
-            # Visual indicator of getting item data
-            with console.status(f"[bold green]Getting {itemP.name} item data..."):
-                # Get all items
-                options += itemP.get_item_list()
+        options: list[str | Separator] = []
 
-        itemParsers.steam.get_steam_price()
-        ans = graphics.draw_market_page(options, itemP.name)
+        # Visual indicator of getting item data
+        curr_parser = itemParsers.csfloat
+        with console.status(f"[bold green]Getting {curr_parser.name} item data..."):
+            # Get all items
+            options += curr_parser.get_item_list()
+
+        # itemParsers.steam.get_steam_price()
+        ans = draw_market_page(options, curr_parser.name)
 
         # Return next state
         return config.change_market_page(ans)
@@ -53,7 +66,7 @@ class ShowMarket(classes.State):
 # MAIN PROGRAM LOOP
 if (__name__ == "__main__"):
     # Init statemachine
-    sm = classes.StateMachine(MainMenu())
+    sm = StateMachine(MainMenu())
 
     while True:
         ans = sm.run()
@@ -62,5 +75,5 @@ if (__name__ == "__main__"):
         if ans is not None:
             sm.change_state(ans)
         else:
-            graphics.clear_terminal()
+            clear_terminal()
             break

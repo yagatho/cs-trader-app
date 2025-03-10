@@ -1,12 +1,14 @@
 # File used to store all the global variables that are not for temp debug
 
-import classes
+from classes import Item
+from classes import Params
+
 import graphics
 import main
 import markets
 
 # Global var
-params = classes.Params(1, 25)
+params = Params(1, 25)
 curr_market = 0
 item_list = []
 
@@ -166,7 +168,7 @@ def change_market_page(ans: str):
         return markets.Search()
     else:
         global item_list
-        result = list(
+        result: list[Item] = list(
             filter(lambda item: item.header ==
                    ans, item_list)
         )

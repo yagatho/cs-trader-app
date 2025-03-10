@@ -1,20 +1,24 @@
 # All the functions that draw something in the terminal
 import shutil
 import config
-import classes
-import main
+
+from classes import State
+from classes import Item
+
+# Inquirer prompts
+from InquirerPy.separator import Separator
+from InquirerPy.resolver import prompt
+
+# Rich visuals
 from rich.console import Console
 from rich.markdown import Markdown
-from InquirerPy import prompt
-from InquirerPy.separator import Separator
 
 # GLOBAL
 console = Console(force_terminal=True, color_system="truecolor")
 
+
 # MAIN FUNCTIONS
-
-
-def draw_page(items: list, bot: str = "", top: str = "", msg: str = ""):
+def draw_page(items: list[str | Separator], bot: str = "", top: str = "", msg: str = ""):
     """ Draws page with prompt made of items.
     Returns the answer. """
     clear_terminal()
@@ -53,7 +57,7 @@ def draw_page(items: list, bot: str = "", top: str = "", msg: str = ""):
     return ans['menu']
 
 
-def draw_menu_page(items: list, msg: str = ""):
+def draw_menu_page(items: list[str | Separator], msg: str = "") -> int:
     """ Draws menu page.
     Returns the index of the answer. """
 
@@ -79,10 +83,12 @@ def draw_menu_page(items: list, msg: str = ""):
     ]
 
     ans = prompt(question)
-    return items.index(ans['menu'])-1
+    key:str = str(ans.get('menu'))
+
+    return items.index(key)-1
 
 
-def draw_item_page(item: classes.Item):
+def draw_item_page(item: Item) -> State:
     """ Draws menu page.
     Returns back the market state. """
 
@@ -95,10 +101,9 @@ def draw_item_page(item: classes.Item):
     mdf += "\n- `Offer ID:` " + str(item.id)
     mdf += "\n- `Offer type:` " + str(item.offer_type)
     mdf += "\n- `Vendor:` " + str(item.vendor)
-    mdf += "\n- `Price:` " + str(item.price_latest) + " " + str(item.currency)
+    mdf += "\n- `Price:` " + str(item.price) + " " + str(item.currency)
     mdf += "\n## Item Stats "
-    mdf += "\n\n - `Item float:` " + \
-        str(item.float_val) + " `" + item.wear + "`"
+    mdf += "\n\n - `Item float:` " + str(item.float_val) + " `" + str(item.wear) + "`"
     mdf += "\n- `Item pattern:` " + str(item.paint_seed)
     mdf += "\n## Stickers "
     for i in item.stickers:
@@ -112,11 +117,11 @@ def draw_item_page(item: classes.Item):
     # Wait
     input(" ")
 
-    return main.ShowMarket()
+    return ShowMarket()
 
 
 # PAGE SPECIFIC FUNCTIONS
-def draw_market_page(options: list, market: str = ""):
+def draw_market_page(options: list[str | Separator], market: str = "") -> str:
     """ Draw market page.
     Returns the index of the answer. """
 
@@ -136,7 +141,7 @@ def clear_terminal():
     print("\033[H\033[J")
 
 
-def float_to_hex(value):
+def float_to_hex(value: float) -> str:
     value = max(0, min(1, value))
 
     red = int(255 * value)
@@ -144,5 +149,4 @@ def float_to_hex(value):
     blue = 0
 
     hex_value = "#{:02x}{:02x}{:02x}".format(red, green, blue)
-
     return hex_value
