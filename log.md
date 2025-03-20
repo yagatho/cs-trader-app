@@ -1,3 +1,0 @@
-- [ ] Cache the data
-- [ ] Make the possible input for more API keys
-- [ ] 
