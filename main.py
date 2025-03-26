@@ -2,7 +2,7 @@
 import config
 
 # Util
-from classes import State
+from modules.classes import State
 from classes import StateMachine
 
 # Graphics
