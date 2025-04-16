@@ -5,7 +5,7 @@
 This project is under development and is kinda broken rn. 
 #### Current Focus: Multi market support
 
-## Importing the proect
+## Importing the project
 
 ### Prerequisites
 
