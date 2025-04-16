@@ -1,11 +1,9 @@
 # File used to store all the global variables that are not for temp debug
 
-from classes import Item
-from classes import Params
+from modules.classes import Item
+from modules.classes import Params
 
-import graphics
 import main
-import markets
 
 # Global var
 params = Params(1, 25)

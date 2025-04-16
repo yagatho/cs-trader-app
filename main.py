@@ -3,14 +3,14 @@ import config
 
 # Util
 from modules.classes import State
-from classes import StateMachine
+from modules.classes import StateMachine
 
 # Graphics
-from graphics import draw_menu_page
-from graphics import draw_market_page
-from graphics import clear_terminal
+from modules.graphics import draw_menu_page
+from modules.graphics import draw_market_page
+from modules.graphics import clear_terminal
 
-import itemParsers
+import modules.itemParsers as itemParsers
 from rich.console import Console
 from InquirerPy.separator import Separator
 from typing_extensions import override

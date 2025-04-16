@@ -2,8 +2,8 @@
 import shutil
 import config
 
-from classes import State
-from classes import Item
+from modules.classes import State
+from modules.classes import Item
 
 # Inquirer prompts
 from InquirerPy.separator import Separator

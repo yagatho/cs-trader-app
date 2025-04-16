@@ -1,5 +1,5 @@
-import jsonModules
-import classes
+import modules.jsonModules as jsonModules
+import modules.classes as classes
 import config
 import shutil
 import requests

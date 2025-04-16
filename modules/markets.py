@@ -1,8 +1,8 @@
 # Used to store the states for each seperate markets at least for now
 
-import classes
+import modules.classes
 import config
-import utility
+import modules.utility
 import json
 import main
 from InquirerPy import prompt

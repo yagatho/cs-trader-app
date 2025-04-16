@@ -1,38 +1,36 @@
 # CS TRADER APP
 
+## Status 
 
+This project is under development and is kinda broken rn. 
+#### Current Focus: Multi market support
 
+## Importing the proect
 
-# General structure
+### Prerequisites
 
-### Main Menu
-- [x] Main Menu -> Market
+If you are interested in importing/contributing to the project, you can start by downloading the `Python 3.10.13`.
 
-#### Market Page
-- [ ] Options in market where you can choose what market you want to search.
-- [ ] Options for item details.
-- [x] Search by item name
+#### Virtual Environment
 
-#### Item Page
-- [x] General item info
-- [ ] Steam lowest item price for comparison
+Activate the virtual environment:
 
+```bash
+source myenv/bin/activate
+```
 
+### Cloning the repository
 
+Clone the repo:
 
+```bash
+git clone https://github.com/yagatho/cs-trader-app
+cd cs-trader-app
+```
 
+Then run the project from the root directory:
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+```bash
+python main.py
+```
 

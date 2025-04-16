@@ -1,7 +1,5 @@
 # All the API communication basic functions
-
-import network
-import config
+import config 
 
 
 def get_json_csfloat():
